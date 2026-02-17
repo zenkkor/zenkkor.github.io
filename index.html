@@ -33,7 +33,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rok Knez | Auctoritas</title>
-    <meta name="description" content="Rok Knez - CTO, engineer, builder. Auctoritas Ltd.">
+    <meta name="description" content="Rok Knez - CTO, entrepreneur, builder. Auctoritas Ltd.">
+    <meta property="og:title" content="Rok Knez | Auctoritas">
+    <meta property="og:description" content="CTO, entrepreneur, builder. 20+ years building products, leading teams, and shipping at scale. $1.5B+ in transactions processed.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://zenkkor.github.io">
+    <meta property="og:image" content="https://zenkkor.github.io/og-image.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Rok Knez | Auctoritas">
+    <meta name="twitter:description" content="CTO, entrepreneur, builder. 20+ years building products, leading teams, and shipping at scale.">
+    <meta name="twitter:image" content="https://zenkkor.github.io/og-image.svg">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -676,7 +686,7 @@
         <div class="hero-content">
             <p class="hero-label">System.init()</p>
             <h1 class="hero-name">Rok Knez</h1>
-            <p class="hero-tagline">Building the machine that builds machines.</p>
+            <p class="hero-tagline" id="hero-tagline"></p>
             <p class="hero-roles">
                 CTO <span>//</span> Entrepreneur <span>//</span> Builder
             </p>
@@ -743,19 +753,19 @@
                 </div>
                 <div class="about-stats reveal">
                     <div class="stat-card">
-                        <div class="stat-number">20+</div>
+                        <div class="stat-number" data-count="20" data-suffix="+">0</div>
                         <div class="stat-label">Years Building</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">$1.5B+</div>
+                        <div class="stat-number" data-prefix="$" data-count="1.5" data-suffix="B+" data-decimals="1">0</div>
                         <div class="stat-label">Transactions Processed</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">500K+</div>
+                        <div class="stat-number" data-count="500" data-suffix="K+">0</div>
                         <div class="stat-label">AI Calls / Month</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">2K+</div>
+                        <div class="stat-number" data-count="2" data-suffix="K+">0</div>
                         <div class="stat-label">Businesses Served</div>
                     </div>
                 </div>
@@ -848,6 +858,25 @@
     </footer>
 
     <script>
+    /* ====================================================
+       HERO TYPING EFFECT
+       ==================================================== */
+    (function() {
+        const el = document.getElementById('hero-tagline');
+        const text = 'Building the machine that builds machines.';
+        let i = 0;
+        el.classList.add('cursor-blink');
+        setTimeout(function type() {
+            if (i < text.length) {
+                el.textContent += text.charAt(i);
+                i++;
+                setTimeout(type, 50 + Math.random() * 40);
+            } else {
+                setTimeout(() => el.classList.remove('cursor-blink'), 2000);
+            }
+        }, 1200);
+    })();
+
     /* ====================================================
        HERO PARTICLE BACKGROUND
        ==================================================== */
@@ -1267,6 +1296,46 @@
         }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    })();
+
+    /* ====================================================
+       ANIMATED STAT COUNTERS
+       ==================================================== */
+    (function() {
+        const counters = document.querySelectorAll('.stat-number[data-count]');
+        let animated = false;
+
+        function animateCounters() {
+            if (animated) return;
+            animated = true;
+            counters.forEach(el => {
+                const target = parseFloat(el.dataset.count);
+                const decimals = parseInt(el.dataset.decimals) || 0;
+                const prefix = el.dataset.prefix || '';
+                const suffix = el.dataset.suffix || '';
+                const duration = 1500;
+                const start = performance.now();
+
+                function tick(now) {
+                    const elapsed = now - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    const current = (target * eased).toFixed(decimals);
+                    el.textContent = prefix + current + suffix;
+                    if (progress < 1) requestAnimationFrame(tick);
+                }
+                requestAnimationFrame(tick);
+            });
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) animateCounters();
+            });
+        }, { threshold: 0.3 });
+
+        const statsSection = document.querySelector('.about-stats');
+        if (statsSection) observer.observe(statsSection);
     })();
 
     /* ====================================================

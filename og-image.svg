@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0a0a0f"/>
+  <rect x="0" y="0" width="1200" height="630" fill="url(#bg)" opacity="0.15"/>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0" stop-color="#A549EA"/>
+      <stop offset="1" stop-color="#3ED3E7"/>
+    </linearGradient>
+    <linearGradient id="txt" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="50%" stop-color="#A549EA"/>
+      <stop offset="100%" stop-color="#3ED3E7"/>
+    </linearGradient>
+  </defs>
+  <text x="600" y="260" text-anchor="middle" font-family="monospace" font-size="72" font-weight="bold" fill="url(#txt)">Rok Knez</text>
+  <text x="600" y="340" text-anchor="middle" font-family="monospace" font-size="24" fill="#8888a0">CTO // Entrepreneur // Builder</text>
+  <text x="600" y="420" text-anchor="middle" font-family="monospace" font-size="20" fill="#3ED3E7">Building the machine that builds machines.</text>
+  <text x="600" y="530" text-anchor="middle" font-family="monospace" font-size="28" fill="#A549EA" opacity="0.6">AUCTORITAS</text>
+</svg>
