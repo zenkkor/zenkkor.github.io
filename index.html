@@ -123,26 +123,30 @@
         header.site-header nav {
             max-width: 1180px;
             margin: 0 auto;
-            padding: 0 1.5rem;
-            height: 60px;
+            padding: 0.4rem 1.5rem;
+            min-height: 64px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
         .brand {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 0.625rem;
+            height: 64px;
         }
         .brand-mark {
-            width: 26px;
-            height: 26px;
+            width: 40px;
+            height: 40px;
             display: block;
+            color: var(--foreground);
+            transition: color 0.2s;
         }
-        .brand-name {
-            font-size: 0.95rem;
-            font-weight: 700;
-            letter-spacing: -0.01em;
+        .brand-mark .accent { color: var(--purple); }
+        .brand:hover .brand-mark { color: var(--purple); }
+        @media (max-width: 640px) {
+            header.site-header nav { min-height: 56px; padding: 0.4rem 1rem; }
+            .brand { height: 48px; }
+            .brand-mark { width: 30px; height: 30px; }
         }
         .nav-actions {
             display: flex;
@@ -155,9 +159,41 @@
             transition: color 0.2s;
         }
         .nav-actions a:hover { color: var(--foreground); }
+        .nav-toggle { display: none; }
         @media (max-width: 640px) {
             .nav-actions a { display: none; }
+            .nav-toggle {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background: none;
+                border: none;
+                color: var(--foreground);
+                padding: 0.45rem;
+                border-radius: 0.5rem;
+                transition: background-color 0.2s;
+            }
+            .nav-toggle:hover { background: var(--secondary); }
+            .nav-toggle svg { width: 22px; height: 22px; }
         }
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0; right: 0;
+            background: var(--background);
+            border-bottom: 1px solid var(--border);
+            padding: 0.5rem 1.25rem 1rem;
+            flex-direction: column;
+        }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a {
+            font-size: 1rem;
+            color: var(--foreground);
+            padding: 0.75rem 0;
+            border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+        }
+        .mobile-menu a:last-child { border-bottom: 0; }
         .theme-toggle {
             background: none;
             border: none;
@@ -650,14 +686,23 @@
 <header class="site-header">
     <nav>
         <a href="#top" class="brand" aria-label="Auctoritas, home">
-            <img src="logo.svg" alt="" class="brand-mark">
-            <span class="brand-name">Auctoritas</span>
+            <svg class="brand-mark" viewBox="0 0 64 64" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M8 56 L32 8 L56 56" stroke="currentColor"/>
+                <path d="M18 40 L46 40" stroke="currentColor" class="accent"/>
+            </svg>
         </a>
         <div class="nav-actions">
             <a href="#what-i-do">Work</a>
             <a href="#background">Background</a>
             <a href="#game">Game</a>
             <a href="#contact">Contact</a>
+            <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu" type="button" id="nav-toggle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
             <button class="theme-toggle" aria-label="Toggle dark mode" type="button" id="theme-toggle">
                 <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
@@ -669,6 +714,12 @@
             </button>
         </div>
     </nav>
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#what-i-do">Work</a>
+        <a href="#background">Background</a>
+        <a href="#game">Game</a>
+        <a href="#contact">Contact</a>
+    </div>
 </header>
 
 <a id="top"></a>
@@ -938,6 +989,26 @@
     btn.addEventListener('click', () => {
         const isDark = document.documentElement.classList.toggle('dark');
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+})();
+
+/* ====================================================
+   MOBILE MENU
+==================================================== */
+(function() {
+    const btn = document.getElementById('nav-toggle');
+    const menu = document.getElementById('mobile-menu');
+    if (!btn || !menu) return;
+    const close = () => {
+        menu.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+    };
+    btn.addEventListener('click', () => {
+        const open = menu.classList.toggle('open');
+        btn.setAttribute('aria-expanded', String(open));
+    });
+    menu.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') close();
     });
 })();
 
